@@ -58,7 +58,7 @@
 ```
 Arad → Sibiu → Fagaras → Bucharest
 ```
-
+---
 ### 📘 Pseudocódigo - Busca Gulosa
 
 1. Crie uma fila de prioridade `F`
@@ -71,6 +71,39 @@ Arad → Sibiu → Fagaras → Bucharest
             8. Marque `v` como visitado
             9. Insira `v` em `F` com prioridade h(v)
 10. Se a fila esvaziar sem encontrar o objetivo, retorne "falha"
+
+---
+### 📘 Código - Busca Gulosa
+         
+         import heapq
+         
+         def busca_gulosa(grafo, heuristica, inicio, objetivo):
+             visitados = set()
+             fila = []
+             heapq.heappush(fila, (heuristica[inicio], [inicio]))
+         
+             while fila:
+                 _, caminho = heapq.heappop(fila)
+                 no_atual = caminho[-1]
+         
+                 if no_atual in visitados:
+                     continue
+         
+                 visitados.add(no_atual)
+         
+                 if no_atual == objetivo:
+                     print("Caminho encontrado (Gulosa):", " -> ".join(caminho))
+                     return caminho
+         
+                 for vizinho, custo in grafo.get(no_atual, []):
+                     if vizinho not in visitados:
+                         novo_caminho = list(caminho)
+                         novo_caminho.append(vizinho)
+                         heapq.heappush(fila, (heuristica[vizinho], novo_caminho))
+         
+             print("Caminho não encontrado (Gulosa)")
+             return None
+
 
 
 ---
@@ -123,7 +156,7 @@ Arad → Sibiu → Fagaras → Bucharest
 ```
 Arad → Sibiu → Rimnicu Vilcea → Pitesti → Bucharest
 ```
-
+---
 ### 📘 Pseudocódigo - Busca A*
 
 1. Crie uma fila de prioridade `F`
@@ -140,6 +173,37 @@ Arad → Sibiu → Rimnicu Vilcea → Pitesti → Bucharest
             12. Calcule f(v) = g(v) + h(v)
             13. Insira ou atualize `v` em `F` com prioridade f(v)
 14. Se a fila esvaziar sem encontrar o objetivo, retorne "falha"
+---
+
+### 📘 Código - Busca A*
+      
+      def busca_a_star(grafo, heuristica, inicio, objetivo):
+          visitados = set()
+          fila = []
+          heapq.heappush(fila, (heuristica[inicio], 0, [inicio]))  # f(n), g(n), caminho
+      
+          while fila:
+              f, custo_atual, caminho = heapq.heappop(fila)
+              no_atual = caminho[-1]
+      
+              if no_atual in visitados:
+                  continue
+      
+              visitados.add(no_atual)
+      
+              if no_atual == objetivo:
+                  print("Caminho encontrado (A*):", " -> ".join(caminho))
+                  print("Custo total:", custo_atual)
+                  return caminho
+      
+              for vizinho, custo in grafo.get(no_atual, []):
+                  if vizinho not in visitados:
+                      g = custo_atual + custo
+                      f = g + heuristica[vizinho]
+                      heapq.heappush(fila, (f, g, caminho + [vizinho]))
+      
+          print("Caminho não encontrado (A*)")
+          return None
 
 
 ---
