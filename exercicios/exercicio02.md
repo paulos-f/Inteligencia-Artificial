@@ -55,7 +55,53 @@ Durante a execução, os nós são visitados na seguinte ordem:
 Centro → Saco dos Limões, Agronômica → Cacupé ✅
 ```
 
-O algoritmo encontra **Cacupé** ao explorar os vizinhos de **Agronômica**, garantindo o menor caminho possível.
+### O algoritmo encontra **Cacupé** ao explorar os vizinhos de **Agronômica**, garantindo o menor caminho possível.
+---
+
+    from collections import deque
+    
+    # Grafo representado como dicionário (adjacência)
+    grafo = {
+        "CENTRO": ["SACO DOS LIMÕES", "AGRONÔMICA"],
+        "SACO DOS LIMÕES": ["TRINDADE", "COSTEIRA"],
+        "AGRONÔMICA": ["JOÃO PAULO", "SANTA MÔNICA"],
+        "TRINDADE": ["CÓRREGO GRANDE"],
+        "COSTEIRA": [],
+        "JOÃO PAULO": ["ITACORUBI"],
+        "SANTA MÔNICA": [],
+        "CÓRREGO GRANDE": ["PANTANAL"],
+        "ITACORUBI": ["CACUPÉ"],
+        "PANTANAL": [],
+        "CACUPÉ": []
+    }
+    
+    def bfs(inicio, objetivo):
+        fila = deque([[inicio]])  # fila de caminhos
+        visitados = set()
+    
+        while fila:
+            caminho = fila.popleft()  # pega o primeiro caminho da fila
+            no = caminho[-1]  # último nó do caminho atual
+    
+            if no in visitados:
+                continue
+    
+            visitados.add(no)
+    
+            if no == objetivo:
+                print("Caminho encontrado:", " -> ".join(caminho))
+                return caminho
+    
+            for vizinho in grafo.get(no, []):
+                novo_caminho = list(caminho)
+                novo_caminho.append(vizinho)
+                fila.append(novo_caminho)
+    
+        print("Caminho não encontrado.")
+        return None
+
+### Executa a busca
+    bfs("CENTRO", "CACUPÉ")
 
 ---
 
