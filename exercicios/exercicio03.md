@@ -58,6 +58,46 @@ Centro
 ← volta
 → Campeche ✅ (encontrado)
 ```
+---
+### Representação do grafo como dicionário de adjacência
+    grafo = {
+        "CENTRO": ["SACO DOS LIMÕES", "AGRONÔMICA"],
+        "SACO DOS LIMÕES": ["TRINDADE", "COSTEIRA"],
+        "AGRONÔMICA": ["JOÃO PAULO", "SANTA MÔNICA"],
+        "TRINDADE": ["CÓRREGO GRANDE"],
+        "COSTEIRA": ["CAMPECHE"],
+        "JOÃO PAULO": ["ITACORUBI"],
+        "SANTA MÔNICA": [],
+        "CÓRREGO GRANDE": ["PANTANAL"],
+        "PANTANAL": [],
+        "ITACORUBI": [],
+        "CAMPECHE": []
+    }
+    
+    def dfs(inicio, objetivo, visitados=None, caminho=None):
+        if visitados is None:
+            visitados = set()
+        if caminho is None:
+            caminho = []
+    
+        visitados.add(inicio)
+        caminho.append(inicio)
+    
+        if inicio == objetivo:
+            print("Caminho encontrado:", " -> ".join(caminho))
+            return caminho
+    
+        for vizinho in grafo.get(inicio, []):
+            if vizinho not in visitados:
+                resultado = dfs(vizinho, objetivo, visitados, caminho)
+                if resultado:
+                    return resultado
+    
+        caminho.pop()
+        return None
+
+# Executando a busca
+dfs("CENTRO", "CAMPECHE")
 
 ---
 
